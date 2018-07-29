@@ -8,7 +8,7 @@ const user = {
   state: {
     token: getToken(),
     userName: '',
-    userId: '',
+    pkUser: '',
     avatar: '',
     role: '',
     menus: [],
@@ -23,7 +23,7 @@ const user = {
     },
     SET_USER: (state, userInfo) => {
       state.userName = userInfo.userName
-      state.userId = userInfo.userId
+      state.pkUser = userInfo.pkUser
       state.avatar = 'https://www.gravatar.com/avatar/6560ed55e62396e40b34aac1e5041028'
       // state.avatar = userInfo.avatar
       state.role = userInfo.roleName
@@ -33,7 +33,7 @@ const user = {
     RESET_USER: (state) => {
       state.token = ''
       state.userName = ''
-      state.userId = ''
+      state.pkUser = ''
       state.avatar = ''
       state.role = ''
       state.menus = []

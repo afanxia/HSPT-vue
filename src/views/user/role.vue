@@ -114,7 +114,7 @@
       getAllPermission() {
         // 查询所有权限
         getAllPermissions().then(data => {
-          this.allPermission = data.list
+          this.allPermission = data.data
         })
       },
       getList() {
@@ -122,7 +122,7 @@
         this.listLoading = true
         getAllRoles().then(data => {
           this.listLoading = false
-          this.list = data.list
+          this.list = data.data
         })
       },
       getIndex($index) {

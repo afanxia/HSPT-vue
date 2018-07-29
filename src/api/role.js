@@ -3,26 +3,26 @@ import { getToken } from '@/utils/auth'
 
 export function getAllPermissions() {
   return api({
-    url: '/permissions/all',
+    url: 'http://127.0.0.1:8090/sys/permissions/all',
     method: 'get',
-    params: { 'token': getToken() }
+    params: { '_ImpToken_': getToken() }
   })
 }
 
 export function getAllRoles() {
   return api({
-    url: '/roles/all',
+    url: 'http://127.0.0.1:8090/sys/role/conf/all',
     method: 'get',
-    params: { 'token': getToken() }
+    params: { '_ImpToken_': getToken() }
   })
 }
 
 export function addRole(role) {
   return api({
-    url: '/roles/',
+    url: 'http://127.0.0.1:8090/sys/role/conf/',
     method: 'post',
     params: {
-      'token': getToken(),
+      '_ImpToken_': getToken(),
       'role': role
     }
   })
@@ -30,10 +30,10 @@ export function addRole(role) {
 
 export function updateRole(role) {
   return api({
-    url: '/roles/' + role.roleId,
+    url: 'http://127.0.0.1:8090/sys/role/conf/' + role.roleId,
     method: 'patch',
     params: {
-      'token': getToken(),
+      '_ImpToken_': getToken(),
       'role': role
     }
   })
@@ -41,10 +41,10 @@ export function updateRole(role) {
 
 export function deleteRole(roleId) {
   return api({
-    url: '/roles/' + roleId,
+    url: 'http://127.0.0.1:8090/sys/role/conf/' + roleId,
     method: 'delete',
     params: {
-      'token': getToken()
+      '_ImpToken_': getToken()
     }
   })
 }

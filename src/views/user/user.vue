@@ -15,20 +15,22 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="昵称" prop="nickname" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="用户名" prop="username" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="用户名" prop="userCode" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="姓名" prop="userName" style="width: 60px;"></el-table-column>
       <el-table-column align="center" label="角色" width="100">
         <template slot-scope="scope">
-          <el-tag type="success" v-text="scope.row.roleName" v-if="scope.row.roleId===1"></el-tag>
+          <el-tag type="success" v-text="scope.row.roleName" v-if="scope.row.roleCode==='SYS_ADMIN'"></el-tag>
           <el-tag type="primary" v-text="scope.row.roleName" v-else></el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="创建时间" prop="createTime" width="170"></el-table-column>
-      <el-table-column align="center" label="最近修改时间" prop="updateTime" width="170"></el-table-column>
+      <!--<el-table-column align="center" label="创建时间" prop="createTime" width="170"></el-table-column>
+      <el-table-column align="center" label="最近修改时间" prop="updateTime" width="170"></el-table-column>-->
+      <el-table-column align="center" label="电子邮箱" prop="userEmail" width="170"></el-table-column>
+      <el-table-column align="center" label="联系电话" prop="userPhone" width="170"></el-table-column>
       <el-table-column align="center" label="管理" width="220" v-if="hasPerm('user:update')">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
-          <el-button type="danger" icon="delete" v-if="scope.row.userId!=userId "
+          <el-button type="danger" icon="delete" v-if="scope.row.pkUser!=pkUser "
                      @click="removeUser(scope.$index)">删除
           </el-button>
         </template>
@@ -47,30 +49,38 @@
       <el-form class="small-space" :model="tempUser" label-position="left" label-width="80px"
                style='width: 300px; margin-left:50px;'>
         <el-form-item label="用户名" required v-if="dialogStatus=='create'">
-          <el-input type="text" v-model="tempUser.username">
+          <el-input type="text" v-model="tempUser.userCode">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="姓名" required v-if="dialogStatus=='create'">
+          <el-input type="text" v-model="tempUser.userName">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="电子邮箱">
+          <el-input type="text" v-model="tempUser.userEmail">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input type="text" v-model="tempUser.userPhone">
           </el-input>
         </el-form-item>
         <el-form-item label="密码" v-if="dialogStatus=='create'" required>
-          <el-input type="password" v-model="tempUser.password">
+          <el-input type="password" v-model="tempUser.userPassword">
           </el-input>
         </el-form-item>
         <el-form-item label="新密码" v-else>
-          <el-input type="password" v-model="tempUser.password" placeholder="不填则表示不修改">
+          <el-input type="password" v-model="tempUser.userPassword" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
         <el-form-item label="角色" required>
           <el-select v-model="tempUser.roleId" placeholder="请选择">
             <el-option
               v-for="item in roles"
-              :key="item.roleId"
+              :key="item.pkRole"
               :label="item.roleName"
-              :value="item.roleId">
+              :value="item.pkRole">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="昵称" required>
-          <el-input type="text" v-model="tempUser.nickname">
-          </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -103,11 +113,13 @@
           create: '新建用户'
         },
         tempUser: {
-          username: '',
-          password: '',
-          nickname: '',
+          userCode: '',
+          userName: '',
+          userEmail: '',
+          userPhone: '',
+          userPassword: '',
           roleId: '',
-          userId: ''
+          pkUser: ''
         }
       }
     },
@@ -119,13 +131,13 @@
     },
     computed: {
       ...mapGetters([
-        'userId'
+        'pkUser'
       ])
     },
     methods: {
       getAllRoles() {
         getAllRolesInUserPage().then(data => {
-          this.roles = data.list
+          this.roles = data.data
         })
       },
       getList() {
@@ -133,8 +145,8 @@
         this.listLoading = true
         getAllUsers(this.listQuery).then(data => {
           this.listLoading = false
-          this.list = data.list
-          this.totalCount = data.totalCount
+          this.list = data.data
+          this.totalCount = data.data.length
         })
       },
       handleSizeChange(val) {
@@ -158,11 +170,13 @@
       },
       showCreate() {
         // 显示新增对话框
-        this.tempUser.username = ''
-        this.tempUser.password = ''
-        this.tempUser.nickname = ''
+        this.tempUser.userCode = ''
+        this.tempUser.userName = ''
+        this.tempUser.userEmail = ''
+        this.tempUser.userPhone = ''
+        this.tempUser.userPassword = ''
         this.tempUser.roleId = ''
-        this.tempUser.userId = ''
+        this.tempUser.pkUser = ''
         this.dialogStatus = 'create'
         this.dialogFormVisible = true
       },
@@ -170,7 +184,9 @@
         const user = this.list[$index]
         this.tempUser = user
         this.tempUser.deleteStatus = '1'
-        this.tempUser.password = ''
+        this.tempUser.userEmail = user.userEmail
+        this.tempUser.userPhone = user.userPhone
+        this.tempUser.userPassword = ''
         this.dialogStatus = 'update'
         this.dialogFormVisible = true
       },
@@ -187,7 +203,7 @@
         updateUser(this.tempUser).then(() => {
           let msg = '修改成功'
           this.dialogFormVisible = false
-          if (this.userId === this.tempUser.userId) {
+          if (this.pkUser === this.tempUser.pkUser) {
             msg = '修改成功,部分信息重新登录后生效'
           }
           this.$message({
@@ -209,7 +225,7 @@
         }).then(() => {
           const user = _vue.list[$index]
           user.deleteStatus = '2'
-          deleteUser(user.userId).then(() => {
+          deleteUser(user.pkUser).then(() => {
             _vue.getList()
           }).catch(() => {
             _vue.$message.error('删除失败')
