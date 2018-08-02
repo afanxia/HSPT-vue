@@ -57,7 +57,7 @@
           <el-input type="text" v-model="tempRole.roleName" style="width: 250px;">
           </el-input>
         </el-form-item>
-        <el-form-item label="菜单&权限" required>
+        <!--<el-form-item label="菜单&权限" required>
           <div v-for=" (menu,_index) in allPermission" :key="menu.menuName">
             <span style="width: 100px;display: inline-block;">
               <el-button :type="isMenuNone(_index)?'':(isMenuAll(_index)?'success':'primary')" size="mini"
@@ -75,6 +75,7 @@
           </div>
           <p style="color:#848484;">说明:红色权限为对应菜单内的必选权限</p>
         </el-form-item>
+        -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>

@@ -17,6 +17,14 @@ export function getAllRoles() {
   })
 }
 
+export function getRoleInfos() {
+  return api({
+    url: 'http://127.0.0.1:8090/sys/role/conf/getRoleInfos',
+    method: 'get',
+    params: { }
+  })
+}
+
 export function addRole(role) {
   return api({
     url: 'http://127.0.0.1:8090/sys/role/conf/',

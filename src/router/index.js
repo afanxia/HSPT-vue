@@ -57,8 +57,8 @@ const eachMenu = (menus = [], routes = []) => {
           icon: item.menuIco
         },
         // hidden: item.hidden,
-        component: item.menuLev === 1 ? Layout : _import('user/user')
-        // component: item.pkFMenu === 0 ? Layout : resolve => require([`../views${item.link}`], resolve)
+        // component: item.menuLev === 1 ? Layout : _import('user/user')
+        component: item.isEnd === 'N' ? Layout : resolve => require([`../views${item.menuUrl}`], resolve)
       }
       // 递归子菜单
       if (item.children && item.children.length !== 0) {
