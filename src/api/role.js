@@ -27,32 +27,41 @@ export function getRoleInfos() {
 
 export function addRole(role) {
   return api({
-    url: 'http://127.0.0.1:8090/sys/role/conf/',
+    url: 'http://127.0.0.1:8090/sys/role/conf/permissions',
     method: 'post',
-    params: {
-      '_ImpToken_': getToken(),
-      'role': role
+    data: {
+      'platform': 'Web',
+      'version': 'v1',
+      'pkRole': role.pkRole,
+      'roleCode': role.roleCode,
+      'roleName': role.roleName,
+      'roleInfo': role.roleInfo,
+      'permissions': role.permissions
     }
   })
 }
 
 export function updateRole(role) {
   return api({
-    url: 'http://127.0.0.1:8090/sys/role/conf/' + role.roleId,
-    method: 'patch',
-    params: {
-      '_ImpToken_': getToken(),
-      'role': role
+    url: 'http://127.0.0.1:8090/sys/role/conf/permissions/' + role.pkRole,
+    method: 'post',
+    data: {
+      'platform': 'Web',
+      'version': 'v1',
+      'pkRole': role.pkRole,
+      'roleCode': role.roleCode,
+      'roleName': role.roleName,
+      'roleInfo': role.roleInfo,
+      'permissions': role.permissions
     }
   })
 }
 
-export function deleteRole(roleId) {
+export function deleteRole(pkRole) {
   return api({
-    url: 'http://127.0.0.1:8090/sys/role/conf/' + roleId,
+    url: 'http://127.0.0.1:8090/sys/role/conf/' + pkRole,
     method: 'delete',
     params: {
-      '_ImpToken_': getToken()
     }
   })
 }
