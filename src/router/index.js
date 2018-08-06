@@ -31,11 +31,6 @@ export const initMenu = (mainMenu = []) => {
   return backendMenus
   // Menu = mainMenu
 }
-// export const initMenu = (mainMenu = []) => { // LIAOHT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//   if (mainMenu && typeof (JSON.parse(mainMenu) === 'object')) {
-//     Menu = JSON.parse(mainMenu)
-//   }
-// }
 
 /**
  * 动态循环菜单
@@ -117,41 +112,6 @@ export default new Router({
   routes: constantRouterMap
 })
 export const asyncRouterMap = [
-  {
-    path: '/system',
-    component: Layout,
-    redirect: '/system/article',
-    name: '功能模块',
-    meta: { title: '功能模块', icon: 'tree' },
-    children: [
-      {
-        path: 'article',
-        name: '文章',
-        component: _import('article/article'),
-        meta: { title: '文章', icon: 'example' },
-        menu: 'article'
-      }
-    ]
-  },
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/',
-    name: '',
-    meta: { title: '用户权限', icon: 'table' },
-    children: [
-      {
-        path: '', name: '用户列表', component: _import('user/user'), meta: { title: '用户列表', icon: 'user' }, menu: 'user'
-      },
-      {
-        path: 'role',
-        name: '权限管理',
-        component: _import('user/role'),
-        meta: { title: '权限管理', icon: 'password' },
-        menu: 'role'
-      }
-    ]
-  },
   ...sessionRouters(Menu),
   { path: '*', redirect: '/404', hidden: true }
 ]
